@@ -1,0 +1,69 @@
+pipeline{
+agent{
+node{
+                 label "built-in"
+                 customWorkspace "/mnt"
+}
+}
+
+stages {
+	
+stage ('cloning repo on host-1'){	
+steps {
+                 
+		  
+          
+		  
+dir('/mnt/branch-one'){
+
+          sh "sudo rm -rf *"
+		  sh "sudo git clone https://github.com/nupur-londhe/ferrari.git -b master"
+		  sh "sudo chmod -R 777 /mnt/branch-one"
+		  
+}
+}
+}
+
+stage ('cloning repo on host-2'){
+steps {
+dir('/mnt/branch-two'){
+
+          sh "sudo rm -rf *"
+		  sh "sudo git clone https://github.com/nupur-londhe/ferrari.git -b denver"
+          sh "sudo chmod -R 777 /mnt/branch-two"
+
+}
+}
+}
+
+stage ('Initiate playbooks on host-1'){
+steps {
+
+          
+dir('/home/ansible'){
+                 
+		
+		  sh "ansible-playbook testone.yaml"
+
+}
+}
+}
+
+stage ('Initiate playbooks on host-2'){
+steps {
+
+             
+			  
+dir('/home/ansible'){
+                 
+		
+		  sh "ansible-playbook testtwo.yaml"
+
+}
+}
+}
+
+
+
+}
+}
